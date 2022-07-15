@@ -1,5 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
+
+const userRoutes = require('./routes/user');
 const app = express();
 
 const dotenv = require('dotenv');
@@ -16,6 +18,7 @@ mongoose
   .catch(() => console.log('Connexion à MongoDB échouée ! '));
 
 //Erreur CORS
+
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader(
@@ -28,6 +31,6 @@ app.use((req, res, next) => {
   );
   next();
 });
-
 app.use(express.json);
+app.use('/api/auth', userRoutes);
 module.exports = app;
