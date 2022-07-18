@@ -1,13 +1,21 @@
 const User = require('../models/User');
-//Pas encore JWT
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+require('dotenv').config();
 
+const cryptoJs = require('crypto-js');
+
+//Enregistrement Utilisateur
 exports.signup = (req, res, next) => {
+  const emailCryptoJs = cryptoJs
+    .HmacSHA256(req.body.email, process.env.ACCES_CRYPTOJS_MAIL)
+    .toString();
+
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) => {
       const user = new User({
-        email: req.body.email,
+        email: emailCryptoJs,
         password: hash,
       });
       user
@@ -18,23 +26,36 @@ exports.signup = (req, res, next) => {
     .catch((error) => res.status(500).json({ error }));
 };
 
+//Connexion utilisateur
 exports.login = (req, res, next) => {
-  User.findOne({ email: req.body.email })
+  //chiffrer l'email de la requete
+  const emailCryptoJs = cryptoJs
+    .HmacSHA256(req.body.email, process.env.ACCES_CRYPTOJS_MAIL)
+    .toString();
+  //On verifie le mail de l'utilisateur avec ceux enregistrer dans la base de donnée
+  User.findOne({ email: emailCryptoJs })
     .then((user) => {
       if (!user) {
-        res.status(401).json({ message: 'Paire login/password incorrect' });
+        return res
+          .status(401)
+          .json({ message: 'Paire login/password incorrect' });
       } else {
+        //Si le controle du mail est OK on controle le Password avec Bcrypt
         bcrypt
           .compare(req.body.password, user.password)
           .then((valid) => {
             if (!valid) {
-              res
+              return res
                 .status(401)
                 .json({ message: 'Paire login/password incorrect' });
             } else {
               res.status(201).json({
                 userId: user._id,
-                token: 'token',
+                token: jwt.sign(
+                  { userId: user.id },
+                  process.env.ACCES_SECRET_TOKEN,
+                  { expiresIn: '24h' }
+                ),
               });
             }
           })

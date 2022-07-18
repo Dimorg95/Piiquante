@@ -1,16 +1,16 @@
 const express = require('express');
 const mongoose = require('mongoose');
-//verif
+
 const userRoutes = require('./routes/user');
 const app = express();
 
-const dotenv = require('dotenv');
-dotenv.config();
-const DATA_BASE_URL = process.env.DATA_BASE_URL;
+require('dotenv').config();
+
+const path = require('path');
 
 //Connection a la base de donnée
 mongoose
-  .connect(DATA_BASE_URL, {
+  .connect(process.env.DATA_BASE_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -31,6 +31,11 @@ app.use((req, res, next) => {
   );
   next();
 });
-app.use(express.json);
+app.use(express.json());
+
+//Gestionnaire de routage pour les images
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
 app.use('/api/auth', userRoutes);
+
 module.exports = app;
