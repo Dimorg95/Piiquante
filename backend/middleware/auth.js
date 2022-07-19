@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
+//Authorization pour decoder le token
 module.exports = (req, res, next) => {
   try {
     const token = req.headers.authorization.split(' ')[1];

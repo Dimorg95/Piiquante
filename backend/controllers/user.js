@@ -1,16 +1,20 @@
 const User = require('../models/User');
+
+//Require de sécurité
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-require('dotenv').config();
-
 const cryptoJs = require('crypto-js');
+
+require('dotenv').config();
 
 //Enregistrement Utilisateur
 exports.signup = (req, res, next) => {
+  //Chiffrage de l'email
   const emailCryptoJs = cryptoJs
     .HmacSHA256(req.body.email, process.env.ACCES_CRYPTOJS_MAIL)
     .toString();
 
+  //Chiffrage du MDP
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) => {

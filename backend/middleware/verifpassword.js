@@ -21,10 +21,7 @@ passwordSchema
   .digits(2) //Minimum de 2 chiffres
   .has()
   .not()
-  .spaces() //Aucune espace
-  .is()
-  .not()
-  .oneOf(['Passw0rd', 'Password123']); // Valeur Blacklister
+  .spaces(); //Aucune espace
 
 //Vérification de qualité du MDP par rapport au schema
 
@@ -32,13 +29,11 @@ module.exports = (req, res, next) => {
   if (passwordSchema.validate(req.body.password)) {
     next();
   } else {
-    return res
-      .status(400)
-      .json({
-        error: `Le mot de passe n'est pas assez fort ${passwordSchema.validate(
-          'req.body.password',
-          { list: true }
-        )} `,
-      });
+    return res.status(400).json({
+      error: `Le mot de passe n'est pas assez fort ${passwordSchema.validate(
+        'req.body.password',
+        { list: true }
+      )} `,
+    });
   }
 };
