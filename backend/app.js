@@ -22,7 +22,11 @@ mongoose
 //Option pour avoir plus d'info sur le debug
 // mongoose.set('debug', true);
 
-// app.use(helmet());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  })
+);
 //Erreur CORS
 
 app.use((req, res, next) => {
