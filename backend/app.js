@@ -3,6 +3,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
 const userRoutes = require('./routes/user');
 const sauceRoutes = require('./routes/sauce');
 const app = express();
@@ -22,6 +23,7 @@ mongoose
 //Option pour avoir plus d'info sur le debug
 // mongoose.set('debug', true);
 
+//Gere le probléme de l'image illisible avec Helmet
 app.use(
   helmet({
     crossOriginResourcePolicy: false,
@@ -41,6 +43,16 @@ app.use((req, res, next) => {
   );
   next();
 });
+
+//Nettoye les données recues (enlevement de clée commencant par $)
+//pour eviter l'injection
+app.use(
+  mongoSanitize({
+    allowDots: true,
+    replaceWith: '_',
+  })
+);
+
 app.use(express.json());
 
 //Gestionnaire de routage pour les images
