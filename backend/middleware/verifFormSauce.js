@@ -14,8 +14,8 @@ module.exports = (req, res, next) => {
     //Verification du nombre minimum de caractere accepter aprés le trim
 
     // const needThreeCharac = (currentValue) => currentValue.length >= 3;
-    // const needThreeCharac = new RegExp(/[a-zA-Z\s]+$/);
-    // if (tabToTrim.every(needThreeCharac.test())) {
+    //
+    // if (tabToTrim.every(needThreeCharac) {
     //   console.log('OK');
     //   next();
     // } else {

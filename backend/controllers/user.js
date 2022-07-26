@@ -2,6 +2,7 @@ const User = require('../models/User');
 
 //Require de sécurité
 const jwt = require('jsonwebtoken');
+//Cryptage du MDP et  chiffrage de l'email
 const bcrypt = require('bcrypt');
 const cryptoJs = require('crypto-js');
 

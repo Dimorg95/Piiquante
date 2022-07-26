@@ -1,3 +1,4 @@
+//Verification de la validité de l'email avec une Regex
 module.exports = (req, res, next) => {
   const validEmail = (email) => {
     let regex = /[a-z0-9]+@[a-z]+\.[a-z]{2,10}/;

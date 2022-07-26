@@ -20,7 +20,7 @@ exports.createSauce = (req, res, next) => {
   const sauceObject = JSON.parse(req.body.sauce);
   //Ajout regex formulaire test
   //probleme image (encore en cas de formulaire faux l'image s'enregistre quand meme)
-  let regex = new RegExp(/[a-zA-Z\s]+$/);
+  let regex = new RegExp(/[a-zA-Z0-9\s]+$/);
   if (
     regex.test(...sauceObject.name) &&
     regex.test(...sauceObject.manufacturer) &&
@@ -47,6 +47,8 @@ exports.createSauce = (req, res, next) => {
       )
       .catch((error) => res.status(400).json({ error }));
   } else {
+    //test
+
     res.status(401).json({ message: 'Verification non faite refait batard' });
   }
 };
