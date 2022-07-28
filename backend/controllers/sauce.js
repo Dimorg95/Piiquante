@@ -20,7 +20,15 @@ exports.createSauce = (req, res, next) => {
   const sauceObject = JSON.parse(req.body.sauce);
   //Ajout regex formulaire test
   //probleme image (encore en cas de formulaire faux l'image s'enregistre quand meme)
-  let regex = new RegExp(/[a-zA-Z0-9\s]+$/);
+  //regex plus complexe sauf pour description
+  ///\A\S[a-zA-Z]+\s?[a-z]+$/
+  //celui d'avant [a-zA-Z]+$ v2 \A\S[a-zA-Z]+$
+
+  let regex = new RegExp(/[a-zA-Z]+$/);
+  // let regex = new RegExp(/\A\S[a-zA-Z\s]+$/);
+  // let regexSpace = new RegExp(/\A\S[a-zA-Z]+\s?[a-z]+$/);
+  // let regexSpace = new RegExp(/[a-zA-Z]+$/);
+
   if (
     regex.test(...sauceObject.name) &&
     regex.test(...sauceObject.manufacturer) &&
@@ -48,7 +56,6 @@ exports.createSauce = (req, res, next) => {
       .catch((error) => res.status(400).json({ error }));
   } else {
     //test
-
     res.status(401).json({ message: 'Verification non faite refait batard' });
   }
 };
@@ -97,23 +104,35 @@ exports.modifySauce = (req, res, next) => {
       }
     : { ...req.body };
   delete sauceObject._userId;
-  Sauce.findOne({ _id: req.params.id })
-    .then((sauce) => {
-      if (sauce.userId != req.auth.userId) {
-        res.status(401).json({ message: 'Non Autorisé' });
-      } else {
-        //Ont mets a jour la sauce avec les changements
-        Sauce.updateOne(
-          { _id: req.params.id },
-          { ...sauceObject, _id: req.params.id }
-        )
-          .then(() => res.status(200).json({ message: 'Objet modifié!' }))
-          .catch((error) => res.status(401).json({ error }));
-      }
-    })
-    .catch((error) => {
-      res.status(400).json({ error });
-    });
+  let regex = new RegExp(/[a-zA-Z]+$/);
+  if (
+    regex.test(...sauceObject.name) &&
+    regex.test(...sauceObject.manufacturer) &&
+    regex.test(...sauceObject.description) &&
+    regex.test(...sauceObject.mainPepper)
+  ) {
+    Sauce.findOne({ _id: req.params.id })
+      .then((sauce) => {
+        if (sauce.userId != req.auth.userId) {
+          res.status(401).json({ message: 'Non Autorisé' });
+        } else {
+          //test condition pour accepter le formulaire
+
+          //Ont mets a jour la sauce avec les changements
+          Sauce.updateOne(
+            { _id: req.params.id },
+            { ...sauceObject, _id: req.params.id }
+          )
+            .then(() => res.status(200).json({ message: 'Objet modifié!' }))
+            .catch((error) => res.status(401).json({ error }));
+        }
+      })
+      .catch((error) => {
+        res.status(400).json({ error });
+      });
+  } else {
+    res.status(401).json({ message: 'Verification non faite refait batard' });
+  }
 };
 
 //Semble marcher a reverifier avec postman possible bug :/
@@ -165,6 +184,7 @@ exports.likesDislikesSauce = (req, res, next) => {
     case -1:
       //Le cas ou on ajoute un dislike ($push va push notre userId dans le tableau usersDisliked)
       //$inc ajoute un dislike
+
       Sauce.updateOne(
         { _id: sauceId },
         { $push: { usersDisliked: userId }, $inc: { dislikes: +1 } }
@@ -178,3 +198,5 @@ exports.likesDislikesSauce = (req, res, next) => {
       console.log('Il y a une erreur ' + error);
   }
 };
+
+//like/dislike verif

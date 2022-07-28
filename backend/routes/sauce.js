@@ -4,7 +4,7 @@ const multer = require('../middleware/multer-config');
 const router = express.Router();
 
 const sauceCtrl = require('../controllers/sauce');
-//const verifForm = require('../middleware/verifFormSauce');
+// const verifForm = require('../middleware/verifFormSauce');
 
 router.get('/:id', auth, sauceCtrl.getOneSauce);
 router.get('/', auth, sauceCtrl.getAllSauce);

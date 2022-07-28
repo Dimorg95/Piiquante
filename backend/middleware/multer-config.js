@@ -1,4 +1,5 @@
 const multer = require('multer');
+
 //Dictionnaire MIMES pour avoir la bonne extension de fichier
 const MIME_TYPES = {
   'images/jpg': 'jpg',
@@ -13,9 +14,24 @@ const storage = multer.diskStorage({
   },
   //Nommage du fichier
   filename: (req, file, callback) => {
-    const name = file.originalname.split(' ').join('_');
-    const extension = MIME_TYPES[file.mimetype];
-    callback(null, name + Date.now() + '.' + extension);
+    const sauceObject = JSON.parse(req.body.sauce);
+    let regex = new RegExp(/[a-zA-Z]+$/);
+
+    if (
+      regex.test(...sauceObject.name) &&
+      regex.test(...sauceObject.manufacturer) &&
+      regex.test(...sauceObject.description) &&
+      regex.test(...sauceObject.mainPepper)
+    ) {
+      const name = file.originalname.split(' ').join('_');
+      const extension = MIME_TYPES[file.mimetype];
+      callback(null, name + Date.now() + '.' + extension);
+    } else {
+      console.log('la condition ne marche pas donc on tombe ici dans le ELSE');
+      // throw new Error("c'est buger ca merde");
+      callback({ message: 'une erreur est survenu' });
+      // res.status(401).json({ message: 'Verification non faite refait batard' });
+    }
   },
 });
 
