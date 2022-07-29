@@ -150,7 +150,10 @@ exports.likesDislikesSauce = (req, res, next) => {
 
       Sauce.findOne({ _id: sauceId })
         .then((sauce) => {
-          if (sauce.usersLiked.includes(userId)) {
+          if (
+            sauce.usersLiked.includes(userId) ||
+            sauce.usersDisliked.includes(userId)
+          ) {
             res.status(401).json({ message: 'Vous avez deja aimé ce poste' });
           } else {
             Sauce.updateOne(
@@ -194,15 +197,26 @@ exports.likesDislikesSauce = (req, res, next) => {
     case -1:
       //Le cas ou on ajoute un dislike ($push va push notre userId dans le tableau usersDisliked)
       //$inc ajoute un dislike
-
       //Si l'userId n' est  pas deja present dans usersdisliked alors on execute le code sinon erreur
-      Sauce.updateOne(
-        { _id: sauceId },
-        { $push: { usersDisliked: userId }, $inc: { dislikes: +1 } }
-      )
-        .then(() => res.status(200).json({ message: 'Dislike' }))
+      Sauce.findOne({ _id: sauceId })
+        .then((sauce) => {
+          if (
+            sauce.usersDisliked.includes(userId) ||
+            sauce.usersLiked.includes(userId)
+          ) {
+            res
+              .status(401)
+              .json({ message: `Vous avez déja dislike ce poste ` });
+          } else {
+            Sauce.updateOne(
+              { _id: sauceId },
+              { $push: { usersDisliked: userId }, $inc: { dislikes: +1 } }
+            )
+              .then(() => res.status(200).json({ message: 'Dislike' }))
+              .catch((error) => res.status(400).json({ error }));
+          }
+        })
         .catch((error) => res.status(400).json({ error }));
-
       break;
 
     default:
