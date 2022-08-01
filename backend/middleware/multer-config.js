@@ -1,4 +1,5 @@
 const multer = require('multer');
+//test
 
 //Dictionnaire MIMES pour avoir la bonne extension de fichier
 const MIME_TYPES = {
@@ -29,7 +30,8 @@ const storage = multer.diskStorage({
     } else {
       console.log('la condition ne marche pas donc on tombe ici dans le ELSE');
       // throw new Error("c'est buger ca merde");
-      callback({ message: 'une erreur est survenu' });
+      return callback(null, 'erreur');
+
       // res.status(401).json({ message: 'Verification non faite refait batard' });
     }
   },
