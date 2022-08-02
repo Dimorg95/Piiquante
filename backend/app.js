@@ -24,11 +24,16 @@ mongoose
 // mongoose.set('debug', true);
 
 //Gere le probléme de l'image illisible avec Helmet
-app.use(
-  helmet({
-    crossOriginResourcePolicy: false,
-  })
-);
+// app.use(
+//   helmet({
+//     crossOriginResourcePolicy: false,
+//   })
+// );
+
+app.use(helmet());
+app.use(helmet.crossOriginResourcePolicy());
+app.use(helmet.crossOriginResourcePolicy({ policy: 'same-site' }));
+app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }));
 //Erreur CORS
 
 app.use((req, res, next) => {

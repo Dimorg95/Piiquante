@@ -1,6 +1,5 @@
 const Sauce = require('../models/Sauce');
 const fs = require('fs');
-// const { error } = require('console');
 
 //Demander toute les sauces
 exports.getAllSauce = (req, res, next) => {
@@ -19,15 +18,8 @@ exports.createSauce = (req, res, next) => {
   //Parse l'objet envoyer et suppression des ID
   const sauceObject = JSON.parse(req.body.sauce);
   //Ajout regex formulaire test
-  //probleme image (encore en cas de formulaire faux l'image s'enregistre quand meme)
-  //regex plus complexe sauf pour description
-  ///\A\S[a-zA-Z]+\s?[a-z]+$/
-  //celui d'avant [a-zA-Z]+$ v2 \A\S[a-zA-Z]+$
 
   let regex = new RegExp(/[a-zA-Z]+$/);
-  // let regex = new RegExp(/\A\S[a-zA-Z\s]+$/);
-  // let regexSpace = new RegExp(/\A\S[a-zA-Z]+\s?[a-z]+$/);
-  // let regexSpace = new RegExp(/[a-zA-Z]+$/);
 
   if (
     regex.test(...sauceObject.name) &&

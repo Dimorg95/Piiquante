@@ -1,4 +1,5 @@
 const multer = require('multer');
+const fs = require('fs');
 //test
 
 //Dictionnaire MIMES pour avoir la bonne extension de fichier
@@ -29,10 +30,9 @@ const storage = multer.diskStorage({
       callback(null, name + Date.now() + '.' + extension);
     } else {
       console.log('la condition ne marche pas donc on tombe ici dans le ELSE');
-      // throw new Error("c'est buger ca merde");
-      return callback(null, 'erreur');
-
-      // res.status(401).json({ message: 'Verification non faite refait batard' });
+      callback(null, 'erreur');
+      fs.unlink('images/erreur', () => {});
+      //supprimer le fichier erreur
     }
   },
 });
