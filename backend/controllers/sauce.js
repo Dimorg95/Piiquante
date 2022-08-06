@@ -7,12 +7,14 @@ exports.getAllSauce = (req, res, next) => {
     .then((sauces) => res.status(200).json(sauces))
     .catch((error) => res.status(400).json({ error }));
 };
+
 //Demander une sauce selon son ID
 exports.getOneSauce = (req, res, next) => {
   Sauce.findOne({ _id: req.params.id })
     .then((sauce) => res.status(200).json(sauce))
     .catch((error) => res.status(400).json({ error }));
 };
+
 //Création d'une sauce
 exports.createSauce = (req, res, next) => {
   //Parse l'objet envoyer et suppression des ID
@@ -37,8 +39,8 @@ exports.createSauce = (req, res, next) => {
         req.file.filename
       }`,
 
-      usersLiked: [''],
-      usersDisliked: [''],
+      usersLiked: [],
+      usersDisliked: [],
     });
     sauce
       .save()
@@ -74,90 +76,6 @@ exports.deleteSauce = (req, res, next) => {
       res.status(500).json({ error });
     });
 };
-//Modification de sauce
-// exports.modifySauce = (req, res, next) => {
-//   //Si on a un changement d'image on supprime l'ancienne
-
-//   const sauceObjectRegex = req.body;
-//   // console.log(sauceObjectRegex);
-//   let regex = new RegExp(/[a-zA-Z]+$/);
-//   if (
-//     regex.test(sauceObjectRegex.name) &&
-//     regex.test(sauceObjectRegex.manufacturer) &&
-//     regex.test(sauceObjectRegex.description) &&
-//     regex.test(sauceObjectRegex.mainPepper)
-//   ) {
-//     //dernier changement
-//     console.log("Si on ne change pas l'image");
-//     // if (req.file) {
-//     //   //
-//     //   Sauce.findOne({ _id: req.params.id })
-//     //     .then((sauce) => {
-//     //       console.log(sauce.name);
-//     //       // console.log(sauceObjectRegex.sauce.description);
-//     //       //test
-//     //       // if (
-//     //       //   regex.test(sauce.name) &&
-//     //       //   regex.test(sauce.manufacturer) &&
-//     //       //   regex.test(sauce.description) &&
-//     //       //   regex.test(sauce.mainPepper)
-//     //       // ) {
-//     //       console.log(sauce.name);
-//     //       console.log('Condition si on change limage on supprime celle avant');
-//     //       const filename = sauce.imageUrl.split('/images/')[1];
-//     //       fs.unlink(`images/${filename}`, (err) => {
-//     //         if (err) throw err;
-//     //       });
-//     //       // } else {
-//     //       //   // fs.unlink('images/erreur', () => {});
-//     //       //   res
-//     //       //     .status(403)
-//     //       //     .json({ message: 'La condition est fausse donc on tombe ici ' });
-//     //       // }
-//     //     })
-//     //     .catch((error) => res.status(400).json({ error }));
-//     // }
-//     //On rajoute la nouvelle en cas de changement d'image
-//     const sauceObject = req.file
-//       ? {
-//           ...JSON.parse(req.body.sauce),
-//           imageUrl: `${req.protocol}://${req.get('host')}/images/${
-//             req.file.filename
-//           }`,
-//         }
-//       : { ...req.body };
-//     delete sauceObject._userId;
-//     // let regex = new RegExp(/[a-zA-Z]+$/);
-//     //   if (
-//     //     regex.test(...sauceObject.name) &&
-//     //     regex.test(...sauceObject.manufacturer) &&
-//     //     regex.test(...sauceObject.description) &&
-//     //     regex.test(...sauceObject.mainPepper)
-//     //   ) {
-
-//     Sauce.findOne({ _id: req.params.id })
-//       .then((sauce) => {
-//         if (sauce.userId != req.auth.userId) {
-//           res.status(401).json({ message: 'Non Autorisé' });
-//         } else {
-//           //Ont mets a jour la sauce avec les changements
-//           Sauce.updateOne(
-//             { _id: req.params.id },
-//             { ...sauceObject, _id: req.params.id }
-//           )
-//             .then(() => res.status(200).json({ message: 'Objet modifié!' }))
-//             .catch((error) => res.status(401).json({ error }));
-//         }
-//       })
-//       .catch((error) => {
-//         res.status(400).json({ error });
-//       });
-//   } else {
-//     res
-//       .status(403)
-//       .json({ message: 'Verification du formulaire est invalide' });
-//   }
-// };
 
 exports.modifySauce = (req, res, next) => {
   //On rajoute la nouvelle en cas de changement d'image
@@ -195,8 +113,7 @@ exports.modifySauce = (req, res, next) => {
         res.status(400).json({ error });
       });
   } else {
-    console.log('iCI si ca marche pas  ');
-    res.status(401).json({ message: 'Verification non faite refait batard' });
+    res.status(403).json({ message: 'Verification du formulaire non valide' });
   }
 };
 

@@ -16,26 +16,9 @@ const storage = multer.diskStorage({
   },
   //Nommage du fichier
   filename: (req, file, callback) => {
-    const sauceObject = JSON.parse(req.body.sauce);
-    let regex = new RegExp(/[a-zA-Z]+$/);
-
-    if (
-      regex.test(...sauceObject.name) &&
-      regex.test(...sauceObject.manufacturer) &&
-      regex.test(...sauceObject.description) &&
-      regex.test(...sauceObject.mainPepper)
-    ) {
-      const name = file.originalname.split(' ').join('_');
-      const extension = MIME_TYPES[file.mimetype];
-      callback(null, name + Date.now() + '.' + extension);
-    } else {
-      console.log(
-        'la condition ne marche pas donc on tombe ici dans le ELSE MULTER'
-      );
-      callback(null, 'erreur');
-      fs.unlink('images/erreur', () => {});
-      //supprimer le fichier erreur
-    }
+    const name = file.originalname.split(' ').join('_');
+    const extension = MIME_TYPES[file.mimetype];
+    callback(null, name + Date.now() + '.' + extension);
   },
 });
 
