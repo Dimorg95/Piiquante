@@ -20,15 +20,8 @@ mongoose
   })
   .then(() => console.log('Connexion à Mongodb réussie ! '))
   .catch(() => console.log('Connexion à MongoDB échouée ! '));
-//Option pour avoir plus d'info sur le debug
-// mongoose.set('debug', true);
 
 //Gere le probléme de l'image illisible avec Helmet
-// app.use(
-//   helmet({
-//     crossOriginResourcePolicy: false,
-//   })
-// );
 
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy());

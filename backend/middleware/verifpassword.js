@@ -1,7 +1,6 @@
 //Verification d'un mots de passe assez securisé de la part de l'utilisateur
 
 const passwordValidator = require('password-validator');
-// const { schema } = require('../models/User');
 
 //création du schema
 const passwordSchema = new passwordValidator();

@@ -29,7 +29,9 @@ const storage = multer.diskStorage({
       const extension = MIME_TYPES[file.mimetype];
       callback(null, name + Date.now() + '.' + extension);
     } else {
-      console.log('la condition ne marche pas donc on tombe ici dans le ELSE');
+      console.log(
+        'la condition ne marche pas donc on tombe ici dans le ELSE MULTER'
+      );
       callback(null, 'erreur');
       fs.unlink('images/erreur', () => {});
       //supprimer le fichier erreur
