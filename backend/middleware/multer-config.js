@@ -1,5 +1,5 @@
 const multer = require('multer');
-const fs = require('fs');
+
 //test
 
 //Dictionnaire MIMES pour avoir la bonne extension de fichier

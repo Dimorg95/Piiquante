@@ -10,6 +10,8 @@ Vous pouvez cloner ce repository, afin de récupérer les dossiers frontend et b
 - npm install
 - nodemon server
 
+* Création du dossier images dans le backend
+
 ### Lancement du front
 
 - cd frontend

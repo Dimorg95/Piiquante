@@ -49,8 +49,6 @@ exports.createSauce = (req, res, next) => {
       )
       .catch((error) => res.status(400).json({ error }));
   } else {
-    //test
-    fs.unlink('images/erreur', () => {});
     res.status(403).json({ message: 'Verification du formulaire invalide' });
   }
 };
@@ -117,7 +115,6 @@ exports.modifySauce = (req, res, next) => {
   }
 };
 
-//Semble marcher a reverifier avec postman possible bug :/
 exports.likesDislikesSauce = (req, res, next) => {
   let like = req.body.like;
   let userId = req.body.userId;
